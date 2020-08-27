@@ -1,2 +1,4 @@
 # edgeconnector
-This is an module for connecting Azures IoT Edge with ROS, still in development.
+This is an ROSNode for connecting Azures IoT Edge with ROS, still in development.
+
+Repos is missing Dockerfile and Edge Environment
