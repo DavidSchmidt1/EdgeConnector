@@ -66,17 +66,17 @@ if __name__ == "__main__":
         r = rospy.Rate(10) # 10hz
         data="test"
         # connect the client.
-        module_client.connect()
+        await module_client.connect()
     # If using Python 3.7 or above, you can use following code instead:
     # asyncio.run(main())
         while not rospy.is_shutdown():
             print("taking output to data var")
-            input_message = module_client.receive_message_on_input("input1")  # blocking call
+            input_message = await  module_client.receive_message_on_input("input1")  # blocking call
             print(input_message.data)
             data=input_message.data
             pub.publish(data)
             r.sleep()
     except Exception as e:
         print ( "Unexpected error %s " % e )
-        module_client.disconnect()
+        await module_client.disconnect()
         raise
