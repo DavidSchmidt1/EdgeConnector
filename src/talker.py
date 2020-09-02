@@ -16,6 +16,7 @@ async def main():
     await module_client.connect()
     pub = rospy.Publisher('blocked', String, queue_size=2)
     rospy.init_node('detection')
+    r = rospy.Rate(10) # 10hz
     # define behavior for receiving an input message on input1
     async def input1_listener(module_client):
         while True:
@@ -49,7 +50,7 @@ async def main():
     
 
     
-
+    r.sleep()
     # Cancel listening
     listeners.cancel()
 
@@ -63,7 +64,7 @@ if __name__ == "__main__":
         loop = asyncio.get_event_loop()
     # If using Python 3.6 or below, use the following code instead of asyncio.run(main()):
         while True:
-           
+            
             loop.run_until_complete(main())
     except: 
         loop.close()
