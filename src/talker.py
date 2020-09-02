@@ -47,7 +47,7 @@ async def main():
     listeners = asyncio.gather(input1_listener(module_client), input2_listener(module_client))
 
     # Run the stdin listener in the event loop
-    loop = asyncio.get_running_loop()
+    loop = asyncio.get_event_loop()
     user_finished = loop.run_in_executor(None, stdin_listener)
 
     # Wait for user to indicate they are done listening for messages
