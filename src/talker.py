@@ -1,82 +1,69 @@
-#! /usr/bin/env python3
-from azure.iot.device.aio import IoTHubModuleClient
-import rospy
-import json
-import time
+
 import os
-import sys
 import asyncio
+from six.moves import input
+import threading
+from azure.iot.device.aio import IoTHubModuleClient
 from std_msgs.msg import String
+import rospy
 
 
-# class ShareModule(object):
-#     def __init__(self):
-#         self.data=""
-#     async def Grabber(self):
-#         try:
-#             print("Starting Output Grabber")
+async def main():
+    # The client object is used to interact with your Azure IoT hub.
+    module_client = IoTHubModuleClient.create_from_edge_environment()
 
-#             # The client object is used to interact with your Azure IoT hub.
-           
+    # connect the client.
+    await module_client.connect()
+    pub = rospy.Publisher('blocked', String, queue_size=2)
+    rospy.init_node('detection')
+    # define behavior for receiving an input message on input1
+    async def input1_listener(module_client):
+        while True:
+            input_message = await module_client.receive_message_on_input("input1")  # blocking call
+            print("the data in the message received on input1 was ")
+            print(input_message.data)
+            pub.publish(input_message.data)
+            print("custom properties are")
+            print(input_message.custom_properties)
 
-#             # define behavior for receiving an input message on input1
-#             async def input1_listener(self,module_client):
-                
-                
+    # define behavior for receiving an input message on input2
+    async def input2_listener(module_client):
+        while True:
+            input_message = await module_client.receive_message_on_input("input2")  # blocking call
+            print("the data in the message received on input2 was ")
+            print(input_message.data)
+            print("custom properties are")
+            print(input_message.custom_properties)
 
-#             # define behavior for halting the application
-#             def stdin_listener():
-#                 try:
-#                     selection = input("Press Q to quit\n")
-#                     if selection == "Q" or selection == "q":
-#                         print("Quitting...")
-#                         break
-#                 except:
-#                     time.sleep(10)
+    # define behavior for halting the application
+    def stdin_listener():
+        while True:
+            selection = input("Press Q to quit\n")
+            if selection == "Q" or selection == "q":
+                print("Quitting...")
+                break
 
-#         # Schedule task for C2D Listener
-#             listeners = asyncio.gather(input1_listener(module_client))
+    # Schedule task for listeners
+    listeners = asyncio.gather(input1_listener(module_client), input2_listener(module_client))
 
-#             print( "The sample is now waiting for messages. ")
+    # Run the stdin listener in the event loop
+    loop = asyncio.get_running_loop()
+    user_finished = loop.run_in_executor(None, stdin_listener)
 
-#         # Run the stdin listener in the event loop
-#             loop = asyncio.get_event_loop()
-#             user_finished = loop.run_in_executor(None, stdin_listener)
+    # Wait for user to indicate they are done listening for messages
+    await user_finished
 
-#         # Wait for user to indicate they are done listening for messages
-#             await user_finished
+    # Cancel listening
+    listeners.cancel()
 
-#         # Cancel listening
-#             listeners.cancel()
+    # Finally, disconnect
+    await module_client.disconnect()
 
-#         # Finally, disconnect
-#             await module_client.disconnect()
-
-#         except Exception as e:
-#             print ( "Unexpected error %s " % e )
-#             raise
-#     def returner():
-#         return self.data
 
 if __name__ == "__main__":
-    module_client = IoTHubModuleClient.create_from_edge_environment()
-    try:
-        pub = rospy.Publisher('blocked', String, queue_size=2)
-        rospy.init_node('detection')
-        r = rospy.Rate(10) # 10hz
-        data="test"
-        # connect the client.
-        await module_client.connect()
-    # If using Python 3.7 or above, you can use following code instead:
-    # asyncio.run(main())
-        while not rospy.is_shutdown():
-            print("taking output to data var")
-            input_message = await  module_client.receive_message_on_input("input1")  # blocking call
-            print(input_message.data)
-            data=input_message.data
-            pub.publish(data)
-            r.sleep()
-    except Exception as e:
-        print ( "Unexpected error %s " % e )
-        await module_client.disconnect()
-        raise
+    #asyncio.run(main())
+
+    # If using Python 3.6 or below, use the following code instead of asyncio.run(main()):
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
+    loop.close()
