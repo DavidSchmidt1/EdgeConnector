@@ -46,12 +46,9 @@ async def main():
     # Schedule task for listeners
     listeners = asyncio.gather(input1_listener(module_client), input2_listener(module_client))
 
-    # Run the stdin listener in the event loop
-    loop = asyncio.get_event_loop()
-    user_finished = loop.run_in_executor(None, stdin_listener)
+    
 
-    # Wait for user to indicate they are done listening for messages
-    await user_finished
+    
 
     # Cancel listening
     listeners.cancel()
@@ -62,8 +59,11 @@ async def main():
 
 if __name__ == "__main__":
     #asyncio.run(main())
-
+    try:
+        loop = asyncio.get_event_loop()
     # If using Python 3.6 or below, use the following code instead of asyncio.run(main()):
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
+        while True:
+           
+            loop.run_until_complete(main())
+    except: 
+        loop.close()
