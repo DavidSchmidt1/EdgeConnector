@@ -19,12 +19,6 @@ class Connector(object):
         # connect the client.
         print("Client Connected!")
         r = rospy.Rate(10) # 10hz
-    
-    
-    
-    
-    
-   
     async def input1_listener(self,module_client):
             print("starting input listener..")
             while True:
@@ -34,8 +28,7 @@ class Connector(object):
                 pub.publish(input_message.data)
                 print("custom properties are")
                 print(input_message.custom_properties)
-    def main(self,module_client):
-        
+    async def main(self,module_client):
         await module_client.connect()
         listeners = asyncio.gather(input1_listener(module_client))
         r.sleep()
