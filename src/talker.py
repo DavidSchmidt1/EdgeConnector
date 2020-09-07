@@ -9,16 +9,16 @@ import rospy
 
 
 class Connector(object):
-    def __init__():
+    def __init__(self):
         print("Starting ROSConnector Module")
         print("Connect Client...")
-        module_client = IoTHubModuleClient.create_from_edge_environment()
-        pub = rospy.Publisher('blocked', String, queue_size=2)
+        self.module_client = IoTHubModuleClient.create_from_edge_environment()
+        self.pub = rospy.Publisher('blocked', String, queue_size=2)
         rospy.init_node('detection')
         print("....")
         # connect the client.
         print("Client Connected!")
-        r = rospy.Rate(10) # 10hz
+        self.r = rospy.Rate(10) # 10hz
     async def input1_listener(self,module_client):
             print("starting input listener..")
             while True:
@@ -28,10 +28,10 @@ class Connector(object):
                 pub.publish(input_message.data)
                 print("custom properties are")
                 print(input_message.custom_properties)
-    async def main(self,module_client):
-        await module_client.connect()
+    async def main(self):
+        await self.module_client.connect()
         listeners = asyncio.gather(input1_listener(module_client))
-        r.sleep()
+        self.r.sleep()
 
 
 
@@ -60,7 +60,7 @@ async def main():
     except Exception as e: 
         listeners.cancel()
         # Finally, disconnect
-        await module_client.disconnect()
+        await self.module_client.disconnect()
         print("shuting down everything due to:"+ str(e))
 
     
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     #asyncio.run(main())
     try:
         loop = asyncio.get_event_loop()
-        connector=Connector(main_client)
+        connector=Connector()
     # If using Python 3.6 or below, use the following code instead of asyncio.run(main()):
         while True:
             
