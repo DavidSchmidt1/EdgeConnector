@@ -30,7 +30,7 @@ class Connector(object):
             print(input_message.custom_properties)
     async def main(self):
         await self.module_client.connect()
-        listeners = asyncio.gather(input1_listener(module_client))
+        listeners = asyncio.gather(input1_listener(self,module_client))
         self.r.sleep()
 
 
@@ -77,7 +77,7 @@ if __name__ == "__main__":
             
             
             
-            loop.run_until_complete(connector.main())
+            loop.run_until_complete(connector.main(self))
             
     except Exception as e: 
         print("Loop had to be closed due to:"+ str(e))
