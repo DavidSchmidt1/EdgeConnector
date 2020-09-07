@@ -10,6 +10,7 @@ import rospy
 
 class Connector(object):
     def __init__(self):
+        
         self.module_client = IoTHubModuleClient.create_from_edge_environment()
         print("Starting ROSConnector Module")
         print("Connect Client...")
@@ -29,7 +30,7 @@ class Connector(object):
             print("custom properties are")
             print(input_message.custom_properties)
     async def main(self):
-        await module_client.connect()
+        await self.module_client.connect()
         listeners = asyncio.gather(self.input1_listener(self,module_client))
         self.r.sleep()
 
@@ -74,6 +75,9 @@ if __name__ == "__main__":
         connector=Connector()
     # If using Python 3.6 or below, use the following code instead of asyncio.run(main()):
         while True:
+            
+            
+            
             loop.run_until_complete(connector.main())
             
     except Exception as e: 
