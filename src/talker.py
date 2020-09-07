@@ -9,6 +9,7 @@ import rospy
 
 
 class Connector(object):
+    self.module_client = IoTHubModuleClient.create_from_edge_environment()
     def __init__(self):
         print("Starting ROSConnector Module")
         print("Connect Client...")
