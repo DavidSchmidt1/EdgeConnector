@@ -30,6 +30,7 @@ class Connector(object):
             print("custom properties are")
             print(input_message.custom_properties)
     async def main(self):
+        print("testing main")
         await self.module_client.connect()
         listeners = asyncio.gather(self.input1_listener(self,module_client))
         self.r.sleep()
