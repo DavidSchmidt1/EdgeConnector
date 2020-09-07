@@ -8,28 +8,48 @@ from std_msgs.msg import String
 import rospy
 
 
+class Connector(object):
+    print("Starting ROSConnector Module")
+    print("Connect Client...")
+    module_client = IoTHubModuleClient.create_from_edge_environment()
+    pub = rospy.Publisher('blocked', String, queue_size=2)
+    rospy.init_node('detection')
+    print("....")
+    # connect the client.
+    
+    
+    print("Client Connected!")
+    
+    r = rospy.Rate(10) # 10hz
+    async def input1_listener(self,module_client):
+            print("starting input listener..")
+            while True:
+                input_message = await module_client.receive_message_on_input("input1")  # blocking call
+                print("the data in the message received on input1 was ")
+                print(input_message.data)        #b'{"chair": 1}'
+                pub.publish(input_message.data)
+                print("custom properties are")
+                print(input_message.custom_properties)
+    def main(self,module_client):
+        
+        await module_client.connect()
+        listeners = asyncio.gather(input1_listener(module_client))
+        r.sleep()
+
+
+
+
 async def main():
     # The client object is used to interact with your Azure IoT hub.
     try: 
-        print("Starting ROSConnector Module")
-        print("Connect Client...")
-        module_client = IoTHubModuleClient.create_from_edge_environment()
-   
-        print("....")
-        # connect the client.
-        await module_client.connect()
-    
-        print("Client Connected!")
-        pub = rospy.Publisher('blocked', String, queue_size=2)
-        rospy.init_node('detection')
-        r = rospy.Rate(10) # 10hz
+        
         # define behavior for receiving an input message on input1
         async def input1_listener(module_client):
             print("starting input listener..")
             while True:
                 input_message = await module_client.receive_message_on_input("input1")  # blocking call
                 print("the data in the message received on input1 was ")
-                print(input_message.data)
+                print(input_message.data)        #b'{"chair": 1}'
                 pub.publish(input_message.data)
                 print("custom properties are")
                 print(input_message.custom_properties)
@@ -54,10 +74,13 @@ if __name__ == "__main__":
     #asyncio.run(main())
     try:
         loop = asyncio.get_event_loop()
+        connector=Connector(main_client)
     # If using Python 3.6 or below, use the following code instead of asyncio.run(main()):
         while True:
             
-            loop.run_until_complete(main())
+            
+            
+            loop.run_until_complete(connector.main())
             
     except Exception as e: 
         print("Loop had to be closed due to:"+ str(e))
