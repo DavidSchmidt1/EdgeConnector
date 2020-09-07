@@ -18,12 +18,13 @@ class Connector(object):
         print("....")
         # connect the client.
         print("Client Connected!")
+        r = rospy.Rate(10) # 10hz
     
     
     
     
     
-    r = rospy.Rate(10) # 10hz
+   
     async def input1_listener(self,module_client):
             print("starting input listener..")
             while True:
