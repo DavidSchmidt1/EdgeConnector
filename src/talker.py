@@ -36,32 +36,32 @@ class Connector(object):
 
 
 
-async def main():
-    # The client object is used to interact with your Azure IoT hub.
-    try: 
+# async def main():
+#     # The client object is used to interact with your Azure IoT hub.
+#     try: 
         
-        # define behavior for receiving an input message on input1
-        async def input1_listener(module_client):
-            print("starting input listener..")
-            while True:
-                input_message = await module_client.receive_message_on_input("input1")  # blocking call
-                print("the data in the message received on input1 was ")
-                print(input_message.data)        #b'{"chair": 1}'
-                pub.publish(input_message.data)
-                print("custom properties are")
-                print(input_message.custom_properties)
+#         # define behavior for receiving an input message on input1
+#         async def input1_listener(module_client):
+#             print("starting input listener..")
+#             while True:
+#                 input_message = await module_client.receive_message_on_input("input1")  # blocking call
+#                 print("the data in the message received on input1 was ")
+#                 print(input_message.data)        #b'{"chair": 1}'
+#                 pub.publish(input_message.data)
+#                 print("custom properties are")
+#                 print(input_message.custom_properties)
           
 
     
-        # Schedule task for listeners
-        listeners = asyncio.gather(input1_listener(module_client))
-        r.sleep()
-        # Cancel listening
-    except Exception as e: 
-        listeners.cancel()
-        # Finally, disconnect
-        await self.module_client.disconnect()
-        print("shuting down everything due to:"+ str(e))
+#         # Schedule task for listeners
+#         listeners = asyncio.gather(input1_listener(module_client))
+#         r.sleep()
+#         # Cancel listening
+#     except Exception as e: 
+#         listeners.cancel()
+#         # Finally, disconnect
+#         await self.module_client.disconnect()
+#         print("shuting down everything due to:"+ str(e))
 
     
 
