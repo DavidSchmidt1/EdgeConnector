@@ -9,16 +9,19 @@ import rospy
 
 
 class Connector(object):
-    print("Starting ROSConnector Module")
-    print("Connect Client...")
-    module_client = IoTHubModuleClient.create_from_edge_environment()
-    pub = rospy.Publisher('blocked', String, queue_size=2)
-    rospy.init_node('detection')
-    print("....")
-    # connect the client.
+    def __init__():
+        print("Starting ROSConnector Module")
+        print("Connect Client...")
+        module_client = IoTHubModuleClient.create_from_edge_environment()
+        pub = rospy.Publisher('blocked', String, queue_size=2)
+        rospy.init_node('detection')
+        print("....")
+        # connect the client.
+        print("Client Connected!")
     
     
-    print("Client Connected!")
+    
+    
     
     r = rospy.Rate(10) # 10hz
     async def input1_listener(self,module_client):
