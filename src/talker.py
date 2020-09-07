@@ -13,7 +13,6 @@ class Connector(object):
     def __init__(self):
         print("Starting ROSConnector Module")
         print("Connect Client...")
-        self.module_client = IoTHubModuleClient.create_from_edge_environment()
         self.pub = rospy.Publisher('blocked', String, queue_size=2)
         rospy.init_node('detection')
         print("....")
