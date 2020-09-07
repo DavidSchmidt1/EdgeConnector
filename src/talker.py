@@ -9,8 +9,8 @@ import rospy
 
 
 class Connector(object):
-    module_client = IoTHubModuleClient.create_from_edge_environment()
     def __init__(self):
+        self.module_client = IoTHubModuleClient.create_from_edge_environment()
         print("Starting ROSConnector Module")
         print("Connect Client...")
         self.pub = rospy.Publisher('blocked', String, queue_size=2)
@@ -74,9 +74,6 @@ if __name__ == "__main__":
         connector=Connector()
     # If using Python 3.6 or below, use the following code instead of asyncio.run(main()):
         while True:
-            
-            
-            
             loop.run_until_complete(connector.main())
             
     except Exception as e: 
