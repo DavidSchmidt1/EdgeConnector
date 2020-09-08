@@ -26,7 +26,7 @@ class Connector(object):
     async def input1_listener(self,module_client):
         print("starting input listener..")
         while True:
-            input_message = b'{"chair": 1}'#await self.module_client.receive_message_on_input("input1")  # blocking call
+            input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
             print("the data in the message received on input1 was ")
             print(input_message.data.decode("utf-8"))        #b'{"chair": 1}'
             pub_string="test2"
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             
             
             loop.run_until_complete(connector.main())
-            time.sleep(2)
+            time.sleep(3)
             
     except Exception as e: 
         print("Loop had to be closed due to:"+ str(e))
