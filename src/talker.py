@@ -95,7 +95,7 @@ if __name__ == "__main__":
             
             
             
-            loop.run_until_complete(connector.input1_listener(self))
+            loop.run_until_complete(connector.input1_listener())
             
     except Exception as e: 
         print("Loop had to be closed due to:"+ str(e))
