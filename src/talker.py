@@ -6,7 +6,7 @@ import threading
 from azure.iot.device.aio import IoTHubModuleClient
 from std_msgs.msg import String
 import rospy
-
+import time
 
 class Connector(object):
     pub_string=""
@@ -30,6 +30,8 @@ class Connector(object):
             print(input_message.data)        #b'{"chair": 1}'
             pub_string="test2"
             self.pub.publish(pub_string)
+            self.r.sleep()
+            time.sleep(2)
             if 'person' in input_message.data:
                 print("Person detected")
                 self.r.sleep()
@@ -47,9 +49,7 @@ class Connector(object):
             # print(input_message.custom_properties)
     async def main(self):
         await self.module_client.connect()
-        pub_string="test1"
-        rospy.loginfo(pub_string)
-        self.pub.publish(pub_string)
+        
         listeners = asyncio.gather(self.input1_listener(self.module_client))
         
 #         hello_str = "hello world %s" % rospy.get_time()
