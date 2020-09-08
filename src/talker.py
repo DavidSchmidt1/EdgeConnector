@@ -23,7 +23,7 @@ class Connector(object):
     async def input1_listener(self,module_client):
         print("starting input listener..")
         while True:
-            input_message = await module_client.receive_message_on_input("input1")  # blocking call
+            input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
             print("the data in the message received on input1 was ")
             print(input_message.data)        #b'{"chair": 1}'
             pub.publish(input_message.data)
@@ -32,7 +32,7 @@ class Connector(object):
     async def main(self):
         print("testing main")
         await self.module_client.connect()
-        listeners = asyncio.gather(self.input1_listener(self,module_client))
+        listeners = asyncio.gather(self.input1_listener(self.module_client))
         self.r.sleep()
 
 
