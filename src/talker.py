@@ -9,6 +9,7 @@ import rospy
 
 
 class Connector(object):
+    pub_string=""
     pub =""
     def __init__(self):
         pub = rospy.Publisher('blocked', String, queue_size=2)
@@ -27,24 +28,33 @@ class Connector(object):
             input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
             print("the data in the message received on input1 was ")
             print(input_message.data)        #b'{"chair": 1}'
-            pub.publish("test2")
+            pub_string="test2"
+            pub.publish(pub_string)
             if 'person' in input_message.data:
                 print("Person detected")
                 self.r.sleep()
-                pub.publish("detected")
+                pub_string="detected"
+                rospy.loginfo(pub_string)
+                pub.publish(pub_string)
             else:
                 print("No Person found")
-                pub.publish("clear")
+                pub_string="clear"
+                rospy.loginfo(pub_string)
+                pub.publish(pub_string)
                 self.r.sleep()
                 
             # print("custom properties are")
             # print(input_message.custom_properties)
     async def main(self):
         await self.module_client.connect()
-        pub.publish("test1")
+        pub_string="test1"
+        rospy.loginfo(pub_string)
+        pub.publish(pub_string)
         listeners = asyncio.gather(self.input1_listener(self.module_client))
         
-
+#         hello_str = "hello world %s" % rospy.get_time()
+#         
+#         pub.publish(hello_str)
 
 
 
