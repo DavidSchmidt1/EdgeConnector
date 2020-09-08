@@ -26,7 +26,7 @@ class Connector(object):
     async def input1_listener(self,module_client):
         print("starting input listener..")
         while True:
-            input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
+            input_message = self.module_client.receive_message_on_input("input1")  # blocking call
             print("the data in the message received on input1 was ")
             print(input_message.data.decode("utf-8"))        #b'{"chair": 1}'
             pub_string="test2"
