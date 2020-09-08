@@ -11,7 +11,7 @@ import time
 
 class Connector(object):
     pub_string=""
-    await asyncio.sleep(3)
+    
     def __init__(self):
         self.pub = rospy.Publisher('blocked', String, queue_size=2)
         self.module_client = IoTHubModuleClient.create_from_edge_environment()
@@ -50,7 +50,7 @@ class Connector(object):
     async def main(self):
         await self.module_client.connect()
         
-        listeners = asyncio.gather(self.input1_listener(self.module_client))
+        listeners = asyncio.gather(self.input1_listener(self.module_client),self.input1_listener(self.module_client),self.input1_listener(self.module_client))
         
 #         hello_str = "hello world %s" % rospy.get_time()
 #         
