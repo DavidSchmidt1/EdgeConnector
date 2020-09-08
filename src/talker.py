@@ -22,20 +22,21 @@ class Connector(object):
         # connect the client.
         print("Client Connected!")
         self.r = rospy.Rate(10) # 10hz
-        await self.module_client.connect()
+        
     async def input1_listener(self):#(self,module_client)
+        await self.module_client.connect()
         print("starting input listener..")
         while True:
             input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
             print("the data in the message received on input1 was ")
             print(input_message.data)        #b'{"chair": 1}'
-            pub_string="test2"
-            self.pub.publish(pub_string)
+            #pub_string="test2"
+            #self.pub.publish(pub_string)
             self.r.sleep()
             time.sleep(2)
             if 'person' in input_message.data:
                 print("Person detected")
-                self.r.sleep()
+               
                 pub_string="detected"
                 rospy.loginfo(pub_string)
                 self.pub.publish(pub_string)
@@ -44,7 +45,7 @@ class Connector(object):
                 pub_string="detected"
                 rospy.loginfo(pub_string)
                 self.pub.publish(pub_string)
-                self.r.sleep()
+                
                 
             # print("custom properties are")
             # print(input_message.custom_properties)
