@@ -26,7 +26,8 @@ class Connector(object):
             input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
             print("the data in the message received on input1 was ")
             print(input_message.data)        #b'{"chair": 1}'
-            if "person" in input_message.data:
+            self.pub.publish("test")
+            if 'person' in input_message.data:
                 print("Person detected")
                 self.r.sleep()
                 self.pub.publish("detected")
