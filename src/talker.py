@@ -22,7 +22,8 @@ class Connector(object):
         # connect the client.
         print("Client Connected!")
         self.r = rospy.Rate(10) # 10hz
-    async def input1_listener(self,module_client):
+        await self.module_client.connect()
+    async def input1_listener(self):#(self,module_client)
         print("starting input listener..")
         while True:
             input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
@@ -48,9 +49,9 @@ class Connector(object):
             # print("custom properties are")
             # print(input_message.custom_properties)
     async def main(self):
-        await self.module_client.connect()
         
-        listeners = asyncio.gather(self.input1_listener(self.module_client))
+        
+       # listeners = asyncio.gather(self.input1_listener(self.module_client))
         
 #         hello_str = "hello world %s" % rospy.get_time()
 #         
@@ -99,7 +100,7 @@ if __name__ == "__main__":
             
             
             
-            loop.run_until_complete(connector.main())
+            loop.run_until_complete(connector.input1_listener(self))
             
     except Exception as e: 
         print("Loop had to be closed due to:"+ str(e))
