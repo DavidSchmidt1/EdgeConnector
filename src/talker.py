@@ -11,7 +11,7 @@ import time
 
 class Connector(object):
     pub_string=""
-    
+    await asyncio.sleep(3)
     def __init__(self):
         self.pub = rospy.Publisher('blocked', String, queue_size=2)
         self.module_client = IoTHubModuleClient.create_from_edge_environment()
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             
             
             loop.run_until_complete(connector.main())
-            await asyncio.sleep(3)
+            
             
     except Exception as e: 
         print("Loop had to be closed due to:"+ str(e))
