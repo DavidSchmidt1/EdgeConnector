@@ -34,7 +34,7 @@ class Connector(object):
             # print(input_message.custom_properties)
     async def main(self):
         await self.module_client.connect()
-        listeners = asyncio.run(self.input1_listener(self.module_client))
+        listeners = asyncio.gather(self.input1_listener(self.module_client))
         self.r.sleep()
 
 
