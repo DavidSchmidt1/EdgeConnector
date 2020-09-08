@@ -27,7 +27,7 @@ class Connector(object):
             print("the data in the message received on input1 was ")
             print(input_message.data)        #b'{"chair": 1}'
             if "person" in input_message.data:
-                pub.publish("persondetected")
+                pub.publish("detected")
             else:
                 pub.publish("clear")
             # print("custom properties are")
