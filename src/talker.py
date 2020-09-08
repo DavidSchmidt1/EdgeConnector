@@ -10,9 +10,9 @@ import rospy
 
 class Connector(object):
     pub_string=""
-    pub =""
+    
     def __init__(self):
-        pub = rospy.Publisher('blocked', String, queue_size=2)
+        self.pub = rospy.Publisher('blocked', String, queue_size=2)
         self.module_client = IoTHubModuleClient.create_from_edge_environment()
         print("Starting ROSConnector Module")
         print("Connect Client...")
@@ -29,18 +29,18 @@ class Connector(object):
             print("the data in the message received on input1 was ")
             print(input_message.data)        #b'{"chair": 1}'
             pub_string="test2"
-            pub.publish(pub_string)
+            self.pub.publish(pub_string)
             if 'person' in input_message.data:
                 print("Person detected")
                 self.r.sleep()
                 pub_string="detected"
                 rospy.loginfo(pub_string)
-                pub.publish(pub_string)
+                self.pub.publish(pub_string)
             else:
                 print("No Person found")
-                pub_string="clear"
+                pub_string="detected"
                 rospy.loginfo(pub_string)
-                pub.publish(pub_string)
+                self.pub.publish(pub_string)
                 self.r.sleep()
                 
             # print("custom properties are")
@@ -49,7 +49,7 @@ class Connector(object):
         await self.module_client.connect()
         pub_string="test1"
         rospy.loginfo(pub_string)
-        pub.publish(pub_string)
+        self.pub.publish(pub_string)
         listeners = asyncio.gather(self.input1_listener(self.module_client))
         
 #         hello_str = "hello world %s" % rospy.get_time()
