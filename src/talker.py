@@ -100,7 +100,7 @@ if __name__ == "__main__":
             
             
             loop.run_until_complete(connector.main())
-            time.sleep(3)
+            await asyncio.sleep(3)
             
     except Exception as e: 
         print("Loop had to be closed due to:"+ str(e))
