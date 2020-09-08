@@ -6,7 +6,6 @@ import threading
 from azure.iot.device.aio import IoTHubModuleClient
 from std_msgs.msg import String
 import rospy
-import time
 
 
 class Connector(object):
@@ -26,13 +25,13 @@ class Connector(object):
     async def input1_listener(self,module_client):
         print("starting input listener..")
         while True:
-            input_message = b'{"chair": 1}'#await self.module_client.receive_message_on_input("input1")  # blocking call
+            input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
             print("the data in the message received on input1 was ")
-            print(input_message.data.decode("utf-8"))        #b'{"chair": 1}'
+            print(input_message.data)        #b'{"chair": 1}'
             pub_string="test2"
-            self.r.sleep()
+            await asyncio.sleep(1)
             self.pub.publish(pub_string)
-            if 'person' in input_message.data.decode("utf-8") :
+            if 'person' in input_message.data:
                 print("Person detected")
                 self.r.sleep()
                 pub_string="detected"
@@ -40,7 +39,7 @@ class Connector(object):
                 self.pub.publish(pub_string)
             else:
                 print("No Person found")
-                pub_string="clear"
+                pub_string="detected"
                 rospy.loginfo(pub_string)
                 self.pub.publish(pub_string)
                 self.r.sleep()
@@ -51,7 +50,7 @@ class Connector(object):
         await self.module_client.connect()
         
         listeners = asyncio.gather(self.input1_listener(self.module_client))
-        
+        await asyncio.sleep(2)
 #         hello_str = "hello world %s" % rospy.get_time()
 #         
 #         pub.publish(hello_str)
@@ -100,7 +99,6 @@ if __name__ == "__main__":
             
             
             loop.run_until_complete(connector.main())
-            time.sleep(2)
             
     except Exception as e: 
         print("Loop had to be closed due to:"+ str(e))
