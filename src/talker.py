@@ -39,7 +39,7 @@ class Connector(object):
                 self.pub.publish(pub_string)
             else:
                 print("No Person found")
-                pub_string="detected"
+                pub_string="clear"
                 rospy.loginfo(pub_string)
                 self.pub.publish(pub_string)
                 self.r.sleep()
