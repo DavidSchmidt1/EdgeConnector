@@ -26,11 +26,12 @@ class Connector(object):
         print("starting input listener..")
         while True:
             input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
-            print("the data in the message received on input1 was ")
+            
             print(input_message.data)        #b'{"chair": 1}'
-            pub_string="test2"
+            
+            await asyncio.sleep(1)
             self.pub.publish(pub_string)
-            if 'person' in input_message.data:
+            if 'person' in input_message.data.decode("utf-8") :
                 print("Person detected")
                 self.r.sleep()
                 pub_string="detected"
@@ -42,14 +43,14 @@ class Connector(object):
                 rospy.loginfo(pub_string)
                 self.pub.publish(pub_string)
                 self.r.sleep()
-                
+            print("the data in the message received on input1 was ") 
             # print("custom properties are")
             # print(input_message.custom_properties)
     async def main(self):
         await self.module_client.connect()
         
         listeners = asyncio.gather(self.input1_listener(self.module_client))
-        time.sleep(5)
+        await asyncio.sleep(2)
 #         hello_str = "hello world %s" % rospy.get_time()
 #         
 #         pub.publish(hello_str)
@@ -97,7 +98,7 @@ if __name__ == "__main__":
             
             
             
-            loop.run_until_complete(connector.main())
+            loop.run_forever(connector.main())
             
     except Exception as e: 
         print("Loop had to be closed due to:"+ str(e))
