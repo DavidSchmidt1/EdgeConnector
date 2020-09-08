@@ -45,11 +45,10 @@ class Connector(object):
                 pub_string="detected"
                 rospy.loginfo(pub_string)
                 self.pub.publish(pub_string)
-                
-                
+
             # print("custom properties are")
             # print(input_message.custom_properties)
-    async def main(self):
+    #async def main(self):
         
         
        # listeners = asyncio.gather(self.input1_listener(self.module_client))
@@ -86,11 +85,6 @@ class Connector(object):
 #         # Finally, disconnect
 #         await self.module_client.disconnect()
 #         print("shuting down everything due to:"+ str(e))
-
-    
-
-
-
 if __name__ == "__main__":
     #asyncio.run(main())
     try:
