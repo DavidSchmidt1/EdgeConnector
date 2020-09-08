@@ -9,12 +9,13 @@ import rospy
 
 
 class Connector(object):
+    pub =""
     def __init__(self):
-        
+        pub = rospy.Publisher('blocked', String, queue_size=2)
         self.module_client = IoTHubModuleClient.create_from_edge_environment()
         print("Starting ROSConnector Module")
         print("Connect Client...")
-        self.pub = rospy.Publisher('blocked', String, queue_size=2)
+        
         rospy.init_node('detection')
         print("....")
         # connect the client.
@@ -26,19 +27,21 @@ class Connector(object):
             input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
             print("the data in the message received on input1 was ")
             print(input_message.data)        #b'{"chair": 1}'
-            self.pub.publish("test")
+            pub.publish("test2")
             if 'person' in input_message.data:
                 print("Person detected")
                 self.r.sleep()
-                self.pub.publish("detected")
+                pub.publish("detected")
             else:
                 print("No Person found")
+                pub.publish("clear")
                 self.r.sleep()
-                self.pub.publish("clear")
+                
             # print("custom properties are")
             # print(input_message.custom_properties)
     async def main(self):
         await self.module_client.connect()
+        pub.publish("test1")
         listeners = asyncio.gather(self.input1_listener(self.module_client))
         
 
