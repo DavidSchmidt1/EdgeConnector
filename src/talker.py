@@ -26,13 +26,15 @@ class Connector(object):
             input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
             print("the data in the message received on input1 was ")
             print(input_message.data)        #b'{"chair": 1}'
-            pub.publish(input_message.data)
-            print("custom properties are")
-            print(input_message.custom_properties)
+            if "person" in input_message.data:
+                pub.publish("persondetected")
+            else:
+                pub.publish("clear")
+            # print("custom properties are")
+            # print(input_message.custom_properties)
     async def main(self):
-        print("testing main")
         await self.module_client.connect()
-        listeners = asyncio.gather(self.input1_listener(self.module_client))
+        listeners = asyncio.run(self.input1_listener(self.module_client))
         self.r.sleep()
 
 
