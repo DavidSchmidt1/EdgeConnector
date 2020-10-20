@@ -13,7 +13,7 @@ class Connector(object):
     pub_string=""
     
     def __init__(self):
-        self.pub = rospy.Publisher('blocked', String, queue_size=2)
+        self.pub = rospy.Publisher('detection', String, queue_size=2)
         self.module_client = IoTHubModuleClient.create_from_edge_environment()
         print("Starting ROSConnector Module")
         print("Connect Client...")
@@ -28,22 +28,23 @@ class Connector(object):
         while True:
             input_message = await self.module_client.receive_message_on_input("input1")  # blocking call
             print("the data in the message received on input1 was ")
-            print(input_message.data.decode("utf-8"))        #b'{"chair": 1}'
-            pub_string="test2"
+            #print(input_message.data.decode("utf-8"))        #b'{"chair": 1}'
+            pub_string=input_message.data.decode("utf-8")
             self.r.sleep()
             self.pub.publish(pub_string)
-            if 'person' in input_message.data.decode("utf-8") :
-                print("Person detected")
-                self.r.sleep()
-                pub_string="detected"
-                rospy.loginfo(pub_string)
-                self.pub.publish(pub_string)
-            else:
-                print("No Person found")
-                pub_string="clear"
-                rospy.loginfo(pub_string)
-                self.pub.publish(pub_string)
-                self.r.sleep()
+            rospy.loginfo(pub_string)
+            # if 'person' in input_message.data.decode("utf-8") :
+            #     print("Person detected")
+            #     self.r.sleep()
+            #     pub_string="detected"
+            #     rospy.loginfo(pub_string)
+            #     self.pub.publish(pub_string)
+            # else:
+            #     print("No Person found")
+            #     pub_string="clear"
+            #     rospy.loginfo(pub_string)
+            #     self.pub.publish(pub_string)
+            #     self.r.sleep()
                 
             # print("custom properties are")
             # print(input_message.custom_properties)
